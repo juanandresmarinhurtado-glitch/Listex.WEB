@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listex Mayoristas - Venta de Ropa al Mayor</title>
+    <meta name="description"
+        content="Listex - Mayoristas de Ropa. Compra la mejor ropa al mayor, moderna y de excelente calidad.">
+    <meta name="referrer" content="no-referrer">
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Ionicons for icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand-logo">Listex<span>.</span></a>
+
+            <div class="search-bar">
+                <ion-icon name="search-outline"></ion-icon>
+                <input type="text" id="search-input" placeholder="Buscar productos por nombre o categoría...">
+            </div>
+
+            <div class="nav-actions">
+                <button class="cart-btn" id="open-cart-btn" aria-label="Abrir Carrito">
+                    <ion-icon name="bag-handle-outline"></ion-icon>
+                    <span class="cart-badge" id="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Search Bar -->
+        <div class="mobile-search-bar">
+            <ion-icon name="search-outline"></ion-icon>
+            <input type="text" id="mobile-search-input" placeholder="Buscar productos...">
+        </div>
+    </header>
+
+    <main>
+        <!-- Static Hero Banner Section -->
+        <section class="hero-section">
+            <div class="hero-image-wrapper">
+                <img src="./img/media__1773265786277.jpg" alt="Ofertas Mayoristas" class="hero-image">
+                <!-- Clickable areas over the image buttons -->
+                <a href="#catalogo-section" class="hero-btn hero-btn-catalog" aria-label="Ver Catálogo"></a>
+                <a href="https://wa.me/584244125508?text=Hola%20Listex%2C%20vengo%20de%20la%20página%20web"
+                    target="_blank" class="hero-btn hero-btn-whatsapp" id="hero-whatsapp-btn"
+                    aria-label="Comprar por WhatsApp"></a>
+            </div>
+            <div class="hero-badges">
+                <div class="badge"><ion-icon name="cube-outline"></ion-icon> Envíos a todo el país</div>
+                <div class="badge"><ion-icon name="business-outline"></ion-icon> Fabricación propia</div>
+            </div>
+        </section>
+
+        <!-- Dynamic Container where categories and products are injected -->
+        <div class="container" id="productos">
+            <div id="home-view">
+                <!-- Categories Grid -->
+                <section class="category-section">
+                    <div class="category-grid" id="categories-container">
+                        <!-- Dynamic Rectangular Categories injected by JS -->
+                    </div>
+                </section>
+
+                <!-- Search Results (Hidden by default) -->
+                <section class="product-grid-section hidden" id="search-results-section">
+                    <h2 class="section-title">Resultados de Búsqueda</h2>
+                    <div class="product-grid" id="search-results-grid"></div>
+                </section>
+
+                <!-- Ofertas de la Semana (Horizontal Row) -->
+                <section class="product-grid-section" id="ofertas-section">
+                    <div class="section-header-row">
+                        <h2 class="section-title"><span class="emoji-fire">🔥</span> Ofertas de la semana</h2>
+                        <a href="#catalogo-section" class="view-all-link">Ver todo &rsaquo;&rsaquo;</a>
+                    </div>
+                    <div class="horizontal-scroll-container" id="ofertas-container">
+                        <!-- Products rendered via JS -->
+                    </div>
+                </section>
+
+                <!-- Productos Más Vistos (Horizontal Row Auto Scroll) -->
+                <section class="product-grid-section" id="mas-vistos-section">
+                    <div class="section-header-row">
+                        <h2 class="section-title"><span class="emoji-star">⭐</span> Productos Más Vistos</h2>
+                    </div>
+                    <!-- Temu style horizontal cards in a scroller -->
+                    <div class="marquee-wrapper" id="mas-vistos-marquee">
+                        <div class="marquee-content horizontal-cards-container" id="mas-vistos-container">
+                            <!-- Products rendered via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Llegando Ahora / Más Nuevos (Horizontal Row Auto Scroll) -->
+                <section class="product-grid-section" id="mas-nuevos-section">
+                    <div class="section-header-row">
+                        <h2 class="section-title"><span class="emoji-fire">🔥</span> Llegando Ahora</h2>
+                    </div>
+                    <div class="marquee-wrapper" id="mas-nuevos-marquee">
+                        <div class="marquee-content horizontal-cards-container" id="mas-nuevos-container">
+                            <!-- Products rendered via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Global Catalog (2 Column Vertical Grid) -->
+                <section class="product-grid-section" id="catalogo-section">
+                    <div class="section-header-row">
+                        <h2 class="section-title"><span class="emoji-grid">🛍️</span> Todos los Productos</h2>
+                    </div>
+                    <div class="product-grid" id="catalogo-container">
+                        <!-- Products rendered via JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Category Page View (Hidden by default) -->
+            <div id="category-page-view" class="hidden" style="padding-top: 1rem;">
+                <div class="section-header-row" style="margin-bottom: 1.5rem;">
+                    <button class="btn" onclick="closeCategoryPage()"
+                        style="padding: 0.5rem; border-radius: 50px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; background-color: #f1f5f9; color: var(--text-main); border: none; font-size: 1.25rem;">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                    </button>
+                    <h2 id="category-page-title" class="section-title"
+                        style="margin: 0; flex-grow: 1; text-align: center; font-size: 1.25rem;">Categoría</h2>
+                    <div style="width: 44px;"></div> <!-- Spacer for centering -->
+                </div>
+                <div class="product-grid" id="category-page-grid">
+                    <!-- Products rendered via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Listex.</h3>
+                <p>Distribuidores mayoristas de moda. Las mejores marcas y diseños en un solo lugar.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Atención al Cliente</h4>
+                <ul>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Políticas de Envío</a></li>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Listex. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <button class="close-btn" id="close-cart-btn"><ion-icon name="close-outline"></ion-icon></button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Dynamic Cart Items -->
+            <div class="empty-cart-msg">Tu carrito está vacío.</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Estimado</span>
+                <span id="cart-total-price">$0.00</span>
+            </div>
+            <button class="btn btn-primary w-100 disabled" id="checkout-btn">Proceder al Pago</button>
+        </div>
+    </aside>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Finalizar Pedido</h3>
+                <button class="close-btn" id="close-modal-btn"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+            <div class="modal-body">
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fname">Nombre *</label>
+                            <input type="text" id="fname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Apellido *</label>
+                            <input type="text" id="lname" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cedula">Cédula *</label>
+                            <input type="text" id="cedula" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Teléfono *</label>
+                            <input type="tel" id="phone" required placeholder="Ej: 04141234567">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipping-method">Tipo de envío *</label>
+                        <select id="shipping-method" required>
+                            <option value="" disabled selected>Selecciona un método</option>
+                            <option value="MRW">MRW</option>
+                            <option value="ZOOM">ZOOM</option>
+                            <option value="TRANSPORTADORAS_PRIVADAS">Transportadoras Privadas</option>
+                            <option value="RETIRO_TIENDA">Retiro en tienda</option>
+                            <option value="DELIVERY">Delivery (Solo Gran Valencia)</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Shipping Fields -->
+                    <div id="dynamic-shipping-fields" class="dynamic-fields hidden">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <button type="submit" class="btn btn-whatsapp w-100 mt-2">
+                        <ion-icon name="logo-whatsapp"></ion-icon>
+                        Enviar pedido por WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="product-detail-modal" id="product-detail-modal">
+        <div class="detail-modal-content">
+            <button class="close-btn detail-close-btn" id="close-detail-btn"><ion-icon
+                    name="close-outline"></ion-icon></button>
+            <div class="detail-layout">
+                <div class="detail-image-section">
+                    <div class="detail-image-container">
+                        <img src="" alt="" id="detail-image" class="detail-main-image"
+                            onerror="this.src='https://via.placeholder.com/500?text=Listex'">
+                    </div>
+                    <div class="detail-thumbnails" id="detail-thumbnails"></div>
+                </div>
+                <div class="detail-info-section">
+                    <span class="detail-category" id="detail-category"></span>
+                    <h2 class="detail-title" id="detail-title"></h2>
+                    <div class="detail-price" id="detail-price"></div>
+                    <p class="detail-description" id="detail-description"></p>
+
+                    <div class="detail-stock" id="detail-stock"></div>
+
+                    <div class="detail-attributes" id="detail-attributes">
+                        <!-- Dynamic attribute pills -->
+                    </div>
+
+                    <div class="detail-actions">
+                        <button class="btn btn-primary detail-add-btn" id="detail-add-btn">
+                            <ion-icon name="cart-outline"></ion-icon>
+                            Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/584244125508" target="_blank" class="whatsapp-fab" aria-label="Hablar con un Vendedor">
+        <ion-icon name="logo-whatsapp"></ion-icon>
+    </a>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
