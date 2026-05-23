@@ -1,295 +1,214 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listex Mayoristas - Venta de Ropa al Mayor</title>
-    <meta name="description"
-        content="Listex - Mayoristas de Ropa. Compra la mejor ropa al mayor, moderna y de excelente calidad.">
-    <meta name="referrer" content="no-referrer">
-    <!-- Google Fonts: Inter & Outfit -->
+    <title>Listex | Fábrica Textil - Uniformes Sublimados</title>
+    <meta name="description" content="Listex: Especialistas en uniformes sublimados de alta gama. Jersey Dry Fit, Chaquetas Nova Repel y producción industrial con plotter de alta resolución.">
+    <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet">
-    <!-- Ionicons for icons -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
-    <!-- Overlay -->
-    <div class="overlay" id="overlay"></div>
-
-    <!-- Navigation -->
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="#" class="brand-logo">Listex<span>.</span></a>
-
-            <div class="search-bar">
-                <ion-icon name="search-outline"></ion-icon>
-                <input type="text" id="search-input" placeholder="Buscar productos por nombre o categoría...">
+    <div id="start-overlay" class="overlay">
+        <div class="overlay-content">
+            <img src="/logo-white.png" alt="Listex Logo" class="overlay-logo">
+            <div class="scanner-bar"></div>
+            <button id="start-btn" class="cta-button">Iniciar Experiencia</button>
+            <p class="overlay-hint">Activa el sonido para una experiencia inmersiva</p>
+        </div>
+    </div>
+    <div id="app" style="opacity: 0;">
+        <canvas id="bg-canvas"></canvas>
+        
+        <nav class="glass-nav">
+            <div class="logo-container">
+                <img src="/logo-white.png" alt="Listex Logo" class="logo">
             </div>
-
-            <div class="nav-actions">
-                <button class="cart-btn" id="open-cart-btn" aria-label="Abrir Carrito">
-                    <ion-icon name="bag-handle-outline"></ion-icon>
-                    <span class="cart-badge" id="cart-badge">0</span>
+            <div class="audio-controls">
+                <button id="music-toggle" class="glass-btn">
+                    <span id="music-icon">🔇</span>
                 </button>
             </div>
-        </div>
-        <!-- Mobile Search Bar -->
-        <div class="mobile-search-bar">
-            <ion-icon name="search-outline"></ion-icon>
-            <input type="text" id="mobile-search-input" placeholder="Buscar productos...">
-        </div>
-    </header>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#products">Productos</a></li>
+                <li><a href="#quote">Cotizar</a></li>
+            </ul>
+        </nav>
 
-    <main>
-        <!-- Static Hero Banner Section -->
-        <section class="hero-section">
-            <div class="hero-image-wrapper">
-                <img src="./img/media__1773265786277.jpg" alt="Ofertas Mayoristas" class="hero-image">
-                <!-- Clickable areas over the image buttons -->
-                <a href="#catalogo-section" class="hero-btn hero-btn-catalog" aria-label="Ver Catálogo"></a>
-                <a href="https://wa.me/584244125508?text=Hola%20Listex%2C%20vengo%20de%20la%20página%20web"
-                    target="_blank" class="hero-btn hero-btn-whatsapp" id="hero-whatsapp-btn"
-                    aria-label="Comprar por WhatsApp"></a>
+        <section id="home" class="hero section">
+            <div class="hero-video-container">
+                <video autoplay muted loop playsinline class="hero-video">
+                    <source src="/video-2.mov" type="video/quicktime">
+                    <source src="/hero-video.mp4" type="video/mp4">
+                    Tu navegador no soporta videos.
+                </video>
+                <div class="hero-overlay"></div>
             </div>
-            <div class="hero-badges">
-                <div class="badge"><ion-icon name="cube-outline"></ion-icon> Envíos a todo el país</div>
-                <div class="badge"><ion-icon name="business-outline"></ion-icon> Fabricación propia</div>
+            <div class="hero-content">
+                <h1 class="mockup-title">Tecnología en <span class="highlight">Sublimación</span> a gran formato</h1>
+                <p class="mockup-subtitle">Fabricamos Tu uniforme <span class="highlight">100% personalizado</span></p>
+                <p class="mockup-desc">Contamos con plotter industriales y máquinas de confección industrial.</p>
+                <a href="#quote" class="cta-button">Solicitar Cotización</a>
             </div>
         </section>
 
-        <!-- Dynamic Container where categories and products are injected -->
-        <div class="container" id="productos">
-            <div id="home-view">
-                <!-- Categories Grid -->
-                <section class="category-section">
-                    <div class="category-grid" id="categories-container">
-                        <!-- Dynamic Rectangular Categories injected by JS -->
-                    </div>
-                </section>
 
-                <!-- Search Results (Hidden by default) -->
-                <section class="product-grid-section hidden" id="search-results-section">
-                    <h2 class="section-title">Resultados de Búsqueda</h2>
-                    <div class="product-grid" id="search-results-grid"></div>
-                </section>
-
-                <!-- Ofertas de la Semana (Horizontal Row) -->
-                <section class="product-grid-section" id="ofertas-section">
-                    <div class="section-header-row">
-                        <h2 class="section-title"><span class="emoji-fire">🔥</span> Ofertas de la semana</h2>
-                        <a href="#catalogo-section" class="view-all-link">Ver todo &rsaquo;&rsaquo;</a>
-                    </div>
-                    <div class="horizontal-scroll-container" id="ofertas-container">
-                        <!-- Products rendered via JS -->
-                    </div>
-                </section>
-
-                <!-- Productos Más Vistos (Horizontal Row Auto Scroll) -->
-                <section class="product-grid-section" id="mas-vistos-section">
-                    <div class="section-header-row">
-                        <h2 class="section-title"><span class="emoji-star">⭐</span> Productos Más Vistos</h2>
-                    </div>
-                    <!-- Temu style horizontal cards in a scroller -->
-                    <div class="marquee-wrapper" id="mas-vistos-marquee">
-                        <div class="marquee-content horizontal-cards-container" id="mas-vistos-container">
-                            <!-- Products rendered via JS -->
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Llegando Ahora / Más Nuevos (Horizontal Row Auto Scroll) -->
-                <section class="product-grid-section" id="mas-nuevos-section">
-                    <div class="section-header-row">
-                        <h2 class="section-title"><span class="emoji-fire">🔥</span> Llegando Ahora</h2>
-                    </div>
-                    <div class="marquee-wrapper" id="mas-nuevos-marquee">
-                        <div class="marquee-content horizontal-cards-container" id="mas-nuevos-container">
-                            <!-- Products rendered via JS -->
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Global Catalog (2 Column Vertical Grid) -->
-                <section class="product-grid-section" id="catalogo-section">
-                    <div class="section-header-row">
-                        <h2 class="section-title"><span class="emoji-grid">🛍️</span> Todos los Productos</h2>
-                    </div>
-                    <div class="product-grid" id="catalogo-container">
-                        <!-- Products rendered via JS -->
-                    </div>
-                </section>
+        <section id="products" class="products section">
+            <h2 class="section-title">Nuestra Producción</h2>
+            <div class="product-grid" id="dynamic-product-grid">
+                <!-- Product cards will be injected here dynamically by JS -->
             </div>
 
-            <!-- Category Page View (Hidden by default) -->
-            <div id="category-page-view" class="hidden" style="padding-top: 1rem;">
-                <div class="section-header-row" style="margin-bottom: 1.5rem;">
-                    <button class="btn" onclick="closeCategoryPage()"
-                        style="padding: 0.5rem; border-radius: 50px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; background-color: #f1f5f9; color: var(--text-main); border: none; font-size: 1.25rem;">
-                        <ion-icon name="arrow-back-outline"></ion-icon>
-                    </button>
-                    <h2 id="category-page-title" class="section-title"
-                        style="margin: 0; flex-grow: 1; text-align: center; font-size: 1.25rem;">Categoría</h2>
-                    <div style="width: 44px;"></div> <!-- Spacer for centering -->
-                </div>
-                <div class="product-grid" id="category-page-grid">
-                    <!-- Products rendered via JS -->
+            <!-- New Interactive Detail Section -->
+            <div id="product-detail" class="detail-container glass" style="display: none; margin-top: 50px;">
+                <div class="detail-grid">
+                    <div class="detail-video-wrapper">
+                        <div class="video-frame">
+                            <video id="detail-video" autoplay muted loop playsinline>
+                                <source src="/video-2.mov" type="video/quicktime">
+                                <source src="/hero-video.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-label">REPRODUCCIÓN AUTOMÁTICA</div>
+                        </div>
+                    </div>
+                    <div class="detail-info">
+                        <h2 id="detail-title" class="detail-main-title">CARACTERÍSTICAS TÉCNICAS</h2>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>TECNOLOGÍA DRY FIT AVANZADA:</h4>
+                                    <p>Absorción y evaporación rápida de la humedad, transpirabilidad máxima, te mantiene fresco y seco.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>IMPRESIÓN POR SUBLIMACIÓN HD:</h4>
+                                    <p>Colores vibrantes y duraderos que no se desvanecen. Permite diseños complejos y personalizados.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>CONFECCIÓN DE ALTO RENDIMIENTO:</h4>
+                                    <p>Costuras industriales reforzadas, manga corta ergonómica, ajuste premium.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <div class="listex-l">L</div>
+                                </div>
+                                <div class="feature-text">
+                                    <h4>DISEÑO TOTALMENTE PERSONALIZABLE:</h4>
+                                    <p>Tu marca, tu estilo (como se ve en el video).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-actions">
+                            <p id="detail-price-msg" class="detail-price-tag">Desde 10€</p>
+                            <a href="#quote" class="cta-button">Cotizar Ahora</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <h3>Listex.</h3>
-                <p>Distribuidores mayoristas de moda. Las mejores marcas y diseños en un solo lugar.</p>
+        <!-- Satisfied Customers Section -->
+        <section class="section" id="portfolio">
+            <h2 class="section-title">Clientes Satisfechos</h2>
+            <div class="customer-gallery">
+                <img src="/customers/customer-1.jpg" alt="Cliente Listex 1" class="customer-photo">
+                <img src="/customers/customer-2.jpg" alt="Cliente Listex 2" class="customer-photo">
+                <img src="/customers/customer-3.jpg" alt="Cliente Listex 3" class="customer-photo">
+                <img src="/customers/customer-4.jpg" alt="Cliente Listex 4" class="customer-photo">
+                <img src="/customers/customer-5.jpg" alt="Cliente Listex 5" class="customer-photo">
             </div>
-            <div class="footer-links">
-                <h4>Atención al Cliente</h4>
-                <ul>
-                    <li><a href="#">Contacto</a></li>
-                    <li><a href="#">Políticas de Envío</a></li>
-                    <li><a href="#">Términos y Condiciones</a></li>
-                </ul>
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="#quote" class="view-more-btn">Cotizar Ahora</a>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Listex. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+        </section>
 
-    <!-- Cart Sidebar -->
-    <aside class="cart-sidebar" id="cart-sidebar">
-        <div class="cart-header">
-            <h3>Tu Carrito</h3>
-            <button class="close-btn" id="close-cart-btn"><ion-icon name="close-outline"></ion-icon></button>
-        </div>
-        <div class="cart-items" id="cart-items">
-            <!-- Dynamic Cart Items -->
-            <div class="empty-cart-msg">Tu carrito está vacío.</div>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <span>Total Estimado</span>
-                <span id="cart-total-price">$0.00</span>
-            </div>
-            <button class="btn btn-primary w-100 disabled" id="checkout-btn">Proceder al Pago</button>
-        </div>
-    </aside>
-
-    <!-- Checkout Modal -->
-    <div class="checkout-modal" id="checkout-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Finalizar Pedido</h3>
-                <button class="close-btn" id="close-modal-btn"><ion-icon name="close-outline"></ion-icon></button>
-            </div>
-            <div class="modal-body">
-                <form id="checkout-form" class="checkout-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="fname">Nombre *</label>
-                            <input type="text" id="fname" required>
+        <section id="quote" class="quote section">
+            <div class="quote-container glass">
+                <h2 class="section-title">Generar Cotización</h2>
+                <form id="quote-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="name">Nombre / Empresa</label>
+                            <input type="text" id="name" required placeholder="Ej: Juan Pérez o Empresa C.A.">
                         </div>
-                        <div class="form-group">
-                            <label for="lname">Apellido *</label>
-                            <input type="text" id="lname" required>
+                        <div class="input-group">
+                            <label for="id-num">Cédula / RIF</label>
+                            <input type="text" id="id-num" required placeholder="V-00000000 / J-000000000-0">
+                        </div>
+                        <div class="input-group">
+                            <label for="product-type">Producto</label>
+                            <select id="product-type" required>
+                                <option value="" disabled selected>Seleccione un producto</option>
+                                <option value="jersey">Franela Manga Corta (Dry Fit)</option>
+                                <option value="longsleeve">Franela Manga Larga / Jersey (Dry Fit)</option>
+                                <option value="windbreaker">Chaqueta Corta Viento (Nova Repel)</option>
+                                <option value="football">Uniformes de Fútbol (Kit Completo)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="quantity">Cantidad</label>
+                            <input type="number" id="quantity" min="1" required placeholder="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="designer">Nivel de Diseñador</label>
+                            <select id="designer" required>
+                                <option value="junior">Junior (10€) - Estudiantes / Apasionados</option>
+                                <option value="senior">Senior (30€) - Profesional Experto</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="cedula">Cédula *</label>
-                            <input type="text" id="cedula" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Teléfono *</label>
-                            <input type="tel" id="phone" required placeholder="Ej: 04141234567">
+                    <button type="button" id="add-to-quote-btn" class="add-product-btn">Añadir a la Cotización</button>
+
+                    <div id="quote-list-container" class="quote-items-container" style="display: none;">
+                        <h3>Productos en tu Cotización</h3>
+                        <div id="quote-items-list">
+                            <!-- Items will be added here via JS -->
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="shipping-method">Tipo de envío *</label>
-                        <select id="shipping-method" required>
-                            <option value="" disabled selected>Selecciona un método</option>
-                            <option value="MRW">MRW</option>
-                            <option value="ZOOM">ZOOM</option>
-                            <option value="TRANSPORTADORAS_PRIVADAS">Transportadoras Privadas</option>
-                            <option value="RETIRO_TIENDA">Retiro en tienda</option>
-                            <option value="DELIVERY">Delivery (Solo Gran Valencia)</option>
-                        </select>
+                    <div id="price-summary" class="price-summary">
+                        <div class="price-row"><span>Precio Unitario:</span> <span id="unit-price">0€</span></div>
+                        <div class="price-row"><span>Total Productos:</span> <span id="products-total">0€</span></div>
+                        <div class="price-row"><span>Diseño:</span> <span id="design-cost">0€</span></div>
+                        <div class="price-row grand-total"><span>Total Estimado:</span> <span id="grand-total">0€</span></div>
                     </div>
 
-                    <!-- Dynamic Shipping Fields -->
-                    <div id="dynamic-shipping-fields" class="dynamic-fields hidden">
-                        <!-- Injected via JS -->
-                    </div>
-
-                    <button type="submit" class="btn btn-whatsapp w-100 mt-2">
-                        <ion-icon name="logo-whatsapp"></ion-icon>
-                        Enviar pedido por WhatsApp
+                    <button type="submit" class="whatsapp-btn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" class="wa-icon">
+                        Enviar a WhatsApp
                     </button>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Detail Modal -->
-    <div class="product-detail-modal" id="product-detail-modal">
-        <div class="detail-modal-content">
-            <button class="close-btn detail-close-btn" id="close-detail-btn"><ion-icon
-                    name="close-outline"></ion-icon></button>
-            <div class="detail-layout">
-                <div class="detail-image-section">
-                    <div class="detail-image-container">
-                        <img src="" alt="" id="detail-image" class="detail-main-image"
-                            onerror="this.src='https://via.placeholder.com/500?text=Listex'">
-                    </div>
-                    <div class="detail-thumbnails" id="detail-thumbnails"></div>
-                </div>
-                <div class="detail-info-section">
-                    <span class="detail-category" id="detail-category"></span>
-                    <h2 class="detail-title" id="detail-title"></h2>
-                    <div class="detail-price" id="detail-price"></div>
-                    <p class="detail-description" id="detail-description"></p>
-
-                    <div class="detail-stock" id="detail-stock"></div>
-
-                    <div class="detail-attributes" id="detail-attributes">
-                        <!-- Dynamic attribute pills -->
-                    </div>
-
-                    <div class="detail-actions">
-                        <button class="btn btn-primary detail-add-btn" id="detail-add-btn">
-                            <ion-icon name="cart-outline"></ion-icon>
-                            Agregar al Carrito
-                        </button>
-                    </div>
+                <div class="info-footer">
+                    <p>* El tiempo de elaboración es de 7 días hábiles tras aprobación del diseño.</p>
+                    <p>* Se inicia producción con el 50%. El diseño requiere 100% de pago previo.</p>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Listex Fábrica Textil. Todos los derechos reservados.</p>
+        </footer>
     </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/584244125508" target="_blank" class="whatsapp-fab" aria-label="Hablar con un Vendedor">
-        <ion-icon name="logo-whatsapp"></ion-icon>
-    </a>
-
-    <script src="js/app.js"></script>
+    <audio id="bg-music" loop>
+        <source src="/interstellar.mp3" type="audio/mpeg">
+    </audio>
+    <script type="module" src="/main.js"></script>
 </body>
-
 </html>
