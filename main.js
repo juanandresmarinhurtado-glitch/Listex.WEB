@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { app, analytics, db } from './firebase.js';
 import { logEvent } from "firebase/analytics";
-import { doc, setDoc, updateDoc, increment, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, updateDoc, increment, collection, onSnapshot } from "firebase/firestore";
 
 // --- THREE.JS BACKGROUND SCENE ---
 const canvas = document.querySelector('#bg-canvas');
@@ -298,19 +298,22 @@ async function initProductGrid() {
     if (!grid) return;
     
     // Default fallback data
-    let products = [
+    let baseProducts = [
         { id: 'jersey', img: '/jersey.png', name: 'Franela Manga Corta', desc: 'Tela Dry Fit especial para sublimación. Máxima absorción y profundidad de color.', price: 'Desde 10€', views: 0 },
         { id: 'longsleeve', img: '/longsleeve.png', name: 'Jersey Manga Larga', desc: 'Suéter deportivo en tela Dry Fit. Confección industrial para alto rendimiento.', price: 'Desde 12€', views: 0 },
         { id: 'windbreaker', img: '/windbreaker.png', name: 'Chaqueta Cortatiento', desc: 'Tela Nova Repel sublimada a gran formato. Protección y estilo personalizado.', price: 'Desde 30€', views: 0 },
         { id: 'football', img: '/football.png', name: 'Uniformes de Fútbol', desc: 'Kits completos (camisa, short y medias) con tecnología Dry Fit de alta durabilidad.', price: 'Desde 20€', views: 0 }
     ];
 
-    try {
-        const querySnapshot = await getDocs(collection(db, "products"));
+    // Escuchar cambios en tiempo real
+    onSnapshot(collection(db, "products"), (snapshot) => {
         const viewData = {};
-        querySnapshot.forEach((doc) => {
+        snapshot.forEach((doc) => {
             viewData[doc.id] = doc.data().views || 0;
         });
+        
+        // Clonar array para no mutar el original en cada actualización
+        let products = JSON.parse(JSON.stringify(baseProducts));
         
         products.forEach(p => {
             if (viewData[p.id] !== undefined) {
@@ -320,23 +323,25 @@ async function initProductGrid() {
         
         // Sort descending (most viewed first)
         products.sort((a, b) => b.views - a.views);
-    } catch (e) {
-        console.error("Firebase fetch error, rendering defaults:", e);
-    }
 
-    grid.innerHTML = products.map(p => `
-        <div class="product-card glass" data-product="${p.id}">
-            <div class="product-img">
-                <img src="${p.img}" alt="${p.name}">
+        // Renderizar de nuevo
+        grid.innerHTML = products.map(p => `
+            <div class="product-card glass" data-product="${p.id}">
+                <div class="product-img">
+                    <img src="${p.img}" alt="${p.name}">
+                </div>
+                <h3>${p.name}</h3>
+                <p class="product-desc">${p.desc}</p>
+                <p class="price-tag">${p.price}</p>
+                <button class="view-more-btn">Ver Más</button>
             </div>
-            <h3>${p.name}</h3>
-            <p class="product-desc">${p.desc}</p>
-            <p class="price-tag">${p.price}</p>
-            <button class="view-more-btn">Ver Más</button>
-        </div>
-    `).join('');
+        `).join('');
 
-    attachProductCardListeners();
+        // Volver a adjuntar los eventos a las nuevas tarjetas
+        attachProductCardListeners();
+    }, (error) => {
+        console.error("Firebase real-time error:", error);
+    });
 }
 
 function attachProductCardListeners() {
