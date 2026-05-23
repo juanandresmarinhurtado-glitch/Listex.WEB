@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Portal de Clientes | Listex</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+    <!-- Background Decor -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Login View -->
+    <div id="login-view" class="portal-view active">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo-wrapper">
+                    <img src="img/logo-listex.png" alt="Listex" class="login-logo" onerror="this.classList.add('error'); document.getElementById('text-logo-login').style.display='flex'">
+                    <div id="text-logo-login" class="brand-logo" style="display:none; justify-content: center; margin-bottom: 2rem; font-size: 2.2rem;">Listex<span>.</span></div>
+                </div>
+                <h1>Portal de Clientes</h1>
+                <p>Ingresa tu número de identidad para gestionar tus pedidos.</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="id-number">Cédula o RIF</label>
+                    <div class="input-with-icon">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <input type="text" id="id-number" placeholder="Ej: 12345678" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-portal btn-primary" id="login-btn">
+                    <span>Acceder</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+            </form>
+            <div class="login-footer">
+                <p>¿Problemas para entrar? <a href="https://wa.me/584244329649?text=Necesito%20contactar%20a%20soporte" target="_blank">Contactar soporte</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="portal-view">
+        <!-- Sidebar Navigation (Desktop) / Header (Mobile) -->
+        <header class="portal-header">
+            <div class="header-content">
+                <div class="brand">
+                    <img src="img/logo-listex.png" alt="Listex" height="35" class="header-logo" onerror="this.classList.add('error'); document.getElementById('text-logo-header').style.display='flex'">
+                    <a href="index.html" id="text-logo-header" class="brand-logo" style="display:none; font-size: 1.5rem;">Listex<span>.</span></a>
+                </div>
+                <div class="user-info">
+                    <span id="user-name">Hola, Usuario</span>
+                    <button class="btn-logout" id="logout-btn" title="Cerrar Sesión">
+                        <ion-icon name="log-out-outline"></ion-icon>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <!-- Summary Stats -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="cart-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <h3 id="stat-total-orders">0</h3>
+                        <p>Pedidos Totales</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="wallet-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <h3 id="stat-total-spent">$0.00</h3>
+                        <p>Inversión Total</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="star-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <h3 id="stat-loyalty">Fiel a Listex</h3>
+                        <p>Nivel de Cliente</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <!-- Orders List -->
+                <div class="orders-section">
+                    <div class="section-header">
+                        <h2>Mis Pedidos Recientes</h2>
+                    </div>
+                    <div class="orders-table-wrapper" id="orders-container">
+                        <!-- Dynamic Content Here -->
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Cargando tus pedidos...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorites / Side Section -->
+                <aside class="side-section">
+                    <div class="side-card">
+                        <h2>Tus Favoritos</h2>
+                        <ul id="favorites-list" class="favorites-list">
+                            <!-- Dynamic Content Here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="side-card promo-card">
+                        <div class="promo-content">
+                            <h3>Nueva Colección</h3>
+                            <p>Descubre lo último en uniformes y ropa táctica.</p>
+                            <a href="index.html" class="btn-portal btn-white">Ver Tienda</a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="portal-toast" class="portal-toast">Mensaje aquí</div>
+
+    <!-- Tracking Modal -->
+    <div id="tracking-modal" class="portal-modal">
+        <div class="modal-overlay" onclick="closeTrackingModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rastreo de Pedido</h2>
+                <button class="close-modal" onclick="closeTrackingModal()"><ion-icon name="close"></ion-icon></button>
+            </div>
+            <div class="modal-body" id="tracking-modal-body">
+                <!-- Dynamic Content Here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Support Button (Only in Dashboard) -->
+    <a href="https://wa.me/584244329649?text=Necesito%20contactar%20a%20soporte" class="floating-support-btn" target="_blank" title="Tengo un problema con mi envío">
+        <ion-icon name="help-buoy-outline"></ion-icon>
+        <span>Tengo un problema con mi envío</span>
+    </a>
+
+    <script src="js/portal.js"></script>
+</body>
+</html>
